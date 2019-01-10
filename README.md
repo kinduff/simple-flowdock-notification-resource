@@ -36,6 +36,8 @@ Required:
 
 ## Examples
 
+![example](https://user-images.githubusercontent.com/1270156/50939445-84356680-1442-11e9-9c34-a3ab2ba1e9bd.png)
+
 ```yml
 ---
 jobs:
