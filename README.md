@@ -73,3 +73,4 @@ resources:
     uri: https://github.com/starkandwayne/concourse-tutorial.git
 ```
 
+![teams-main-pipelines-test-pipe](https://user-images.githubusercontent.com/1270156/50939532-e1311c80-1442-11e9-9064-408d6f3334b7.png)
