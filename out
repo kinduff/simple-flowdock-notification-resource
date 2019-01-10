@@ -1,0 +1,48 @@
+#!/bin/bash
+
+set -e
+set -x
+
+exec 3>&1
+exec 1>&2
+
+PATH=/usr/local/bin:$PATH
+
+payload=$(mktemp /tmp/flowdock-out.XXXXXX)
+
+cat > $payload <&0
+
+# Global Vars
+API_URL="https://api.flowdock.com/messages"
+
+# Params
+status_value=$(jq -r ".params.status_value" < ${payload})
+status_color=$(jq -r ".params.status_color" < ${payload})
+flow_token=$(jq -r ".params.flow_token" < ${payload})
+thread_id=$(cat /proc/sys/kernel/random/uuid)
+
+curl -i -X POST \
+-H "Content-Type:application/json" \
+--data @<(cat <<EOF
+{
+  "flow_token": "$flow_token",
+  "event": "activity",
+  "author": {
+    "name": "Concourse Bot",
+    "avatar": "https://concourse-ci.org/images/trademarks/concourse-black.png"
+  },
+  "external_thread_id": "$thread_id",
+  "title": "$BUILD_JOB_NAME/$BUILD_NAME",
+  "thread": {
+    "title": "Successful build #$BUILD_NAME",
+    "external_url": "$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME",
+    "status": {
+      "color": "$status_color",
+      "value": "$status_value"
+    }
+  }
+}
+EOF
+) ${API_URL}
+
+jq -n "{ version: { timestamp: \"$(date +%s)\" } }" >&3
