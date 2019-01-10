@@ -34,7 +34,7 @@ curl -i -X POST \
   "external_thread_id": "$thread_id",
   "title": "$BUILD_JOB_NAME",
   "thread": {
-    "title": "Successful build #$BUILD_NAME",
+    "title": "Build #$BUILD_NAME",
     "external_url": "$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME",
     "status": {
       "color": "$status_color",
